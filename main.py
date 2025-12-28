@@ -31,7 +31,7 @@ class WeatherApp (QMainWindow):
         self.CitySearch = QLineEdit(self)
         self.CitySearch.setGeometry(30,70,370,30)
         self.CitySearch.setStyleSheet("font-size: 15px;"
-                                      "background-color: white;" \
+                                      "background-color: white;"
                                       "border-radius: 15px;"
                                       "color: #2a2a2a")
         self.CitySearch.setPlaceholderText("Enter your city and country (e.g. London, UK)")
@@ -56,33 +56,47 @@ class WeatherApp (QMainWindow):
         self.City.setAlignment(Qt.AlignCenter)
         
         self.Temperature = QLabel("15", self)
-        self.Temperature.setGeometry(280,240,200,200)
+        self.Temperature.setGeometry(260,240,200,200)
         self.Temperature.setStyleSheet("font-size: 140px;"
                                        "font-weight: bold;")
         self.Temperature.setAlignment(Qt.AlignCenter)
-        #self.TemperatureUnit = QLabel
-        # or self.TemperatureUnitC = QPushButton
-        # or self.TemperatureUnitF = QPushButton
+
+        self.TemperatureUnitSel = QPushButton("°C", self)
+        self.TemperatureUnitSel.setGeometry(440,290,60,50)
+        self.TemperatureUnitSel.setStyleSheet("font-size: 30px;"
+                                              "border: none;"
+                                              "color: white;")
+
+        self.TempSlash = QLabel("/", self)
+        self.TempSlash.setGeometry(505,290,10,50)
+        self.TempSlash.setStyleSheet("font-size: 30px;"
+                                     "color: grey;")
+
+        self.TemperatureUnit2 = QPushButton("°F", self)
+        self.TemperatureUnit2.setGeometry(510,290,60,50)
+        self.TemperatureUnit2.setStyleSheet("font-size: 30px;"
+                                            "border: none;"
+                                            "color: grey;")
 
         self.WeatherIcon = QLabel("🌤️", self)
-        self.WeatherIcon.setGeometry(100,240,200,200)
+        self.WeatherIcon.setGeometry(80,240,200,200)
         self.WeatherIcon.setStyleSheet("font-size: 190px;"
                                        "font-weight: bold;")
         self.WeatherIcon.setAlignment(Qt.AlignCenter)
 
         self.Rain = QLabel("Precipitation: 100%", self)
         self.Rain.setGeometry(80,450,150,70)
-        self.Rain.setStyleSheet("font-size: 70xp;"
+        self.Rain.setStyleSheet("font-size: 15px;"
                                 "font-weight: bold;")
 
         self.Humidity = QLabel("Humidity: 100%", self)
         self.Humidity.setGeometry(255,450,120,70)
-        self.Humidity.setStyleSheet("font-size: 70xp;"
+        self.Humidity.setStyleSheet("font-size: 15px;"
                                     "font-weight: bold;")
 
         self.Windspeed = QLabel("Wind Speed: 5km/h", self)
         self.Windspeed.setGeometry(410,450,150,70)
-        self.Windspeed.setStyleSheet("font-size: 70xp;"
+        self.Windspeed.setStyleSheet("font-size: 15px;"
                                      "font-weight: bold;")
 
     def initUI():
