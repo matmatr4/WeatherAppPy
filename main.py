@@ -8,9 +8,10 @@ class WeatherApp (QMainWindow):
     def __init__(self):
         super().__init__()
 
+        self.cityVar = "City"
+
         self.setWindowTitle("Weather App")
         self.setGeometry(100,100,600,800)
-        #self.setStyleSheet("background-color: #2e2e2e")
 
         self.backgroundPic = QPixmap("pexels-photo-1571730.jpeg")
         self.backgroundLabel = QLabel(self)
@@ -38,16 +39,25 @@ class WeatherApp (QMainWindow):
 
         self.SearchButton = QPushButton("Search", self)
         self.SearchButton.setGeometry(420,67,150,36)
-        self.SearchButton.setStyleSheet("font-size: 20px;"
-                                        "background-color: grey;"
-                                        "border-radius: 15px;")
+        self.SearchButton.setStyleSheet("""
+                                        QPushButton {
+                                            font-size: 20px;
+                                            background-color: grey;
+                                            border-radius: 15px; 
+                                        }
+                                        QPushButton:hover {
+                                            background-color: #bdbdbd;
+                                        }                       
+                                        """)
+        self.SearchButton.clicked.connect(self.getWeather)
+        
 
         #UI part 2
         self.WeatherPanel = QLabel(self)
         self.WeatherPanel.setGeometry(20,120,560,660)
         self.WeatherPanel.setStyleSheet("background-color: rgba(0, 0, 0, 90)")
 
-        self.City = QLabel("City", self)
+        self.City = QLabel(self.cityVar, self)
         self.City.setGeometry(20,150,560,80)
         self.City.setStyleSheet("font-size: 70px;"
                                 "color: white;"
@@ -63,9 +73,13 @@ class WeatherApp (QMainWindow):
 
         self.TemperatureUnitSel = QPushButton("°C", self)
         self.TemperatureUnitSel.setGeometry(440,290,60,50)
-        self.TemperatureUnitSel.setStyleSheet("font-size: 30px;"
-                                              "border: none;"
-                                              "color: white;")
+        self.TemperatureUnitSel.setStyleSheet("""
+                                            QPushButton {
+                                                font-size: 30px;
+                                                border: none;
+                                                color: white; 
+                                            }
+                                            """)
 
         self.TempSlash = QLabel("/", self)
         self.TempSlash.setGeometry(505,290,10,50)
@@ -74,9 +88,16 @@ class WeatherApp (QMainWindow):
 
         self.TemperatureUnit2 = QPushButton("°F", self)
         self.TemperatureUnit2.setGeometry(510,290,60,50)
-        self.TemperatureUnit2.setStyleSheet("font-size: 30px;"
-                                            "border: none;"
-                                            "color: grey;")
+        self.TemperatureUnit2.setStyleSheet("""
+                                            QPushButton {
+                                                font-size: 30px;
+                                                border: none;
+                                                color: grey; 
+                                            }
+                                            QPushButton:hover {
+                                                color: #bdbdbd;
+                                            }
+                                            """)
 
         self.WeatherIcon = QLabel("🌤️", self)
         self.WeatherIcon.setGeometry(80,240,200,200)
@@ -99,7 +120,33 @@ class WeatherApp (QMainWindow):
         self.Windspeed.setStyleSheet("font-size: 15px;"
                                      "font-weight: bold;")
 
-    def initUI():
+
+    def initUI(self):
+        pass
+
+    def getWeather(self):
+        
+        personalApiKey = "937SX7U7TTKKHLWMKQQTMVC2G"
+        cityIn = self.CitySearch.text()
+        url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{cityIn}?key={personalApiKey}"
+        
+        
+        response = requests.get(url)
+        data = response.json()
+
+        #print(data['resolvedAddress'])
+        #print(data['days'][0]['temp'])
+
+        if response.status_code == 200:
+            print(response.status_code)
+            self.displayWeather(data)
+        else:
+            print("error") 
+
+    def displayError(self):
+        pass
+
+    def displayWeather(self):
         pass
 
 if __name__ == "__main__":
