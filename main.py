@@ -8,8 +8,6 @@ class WeatherApp (QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.cityDisp = "City"
-
         self.setWindowTitle("Weather App")
         self.setGeometry(100,100,600,800)
 
@@ -57,7 +55,7 @@ class WeatherApp (QMainWindow):
         self.WeatherPanel.setGeometry(20,120,560,660)
         self.WeatherPanel.setStyleSheet("background-color: rgba(0, 0, 0, 90)")
 
-        self.City = QLabel(self.cityDisp, self)
+        self.City = QLabel("City", self)
         self.City.setGeometry(20,150,560,80)
         self.City.setStyleSheet("font-size: 70px;"
                                 "color: white;"
@@ -65,11 +63,11 @@ class WeatherApp (QMainWindow):
                                 "font-weight: bold;")
         self.City.setAlignment(Qt.AlignCenter)
         
-        self.Temperature = QLabel("15", self)
-        self.Temperature.setGeometry(260,240,200,200)
-        self.Temperature.setStyleSheet("font-size: 140px;"
+        self.Temperature = QLabel("150", self)
+        self.Temperature.setGeometry(260,240,180,200)
+        self.Temperature.setStyleSheet("font-size: 100px;"
                                        "font-weight: bold;")
-        self.Temperature.setAlignment(Qt.AlignCenter)
+        self.Temperature.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
         self.TemperatureUnitSel = QPushButton("°C", self)
         self.TemperatureUnitSel.setGeometry(440,290,60,50)
@@ -99,11 +97,19 @@ class WeatherApp (QMainWindow):
                                             }
                                             """)
 
-        self.WeatherIcon = QLabel("🌤️", self)
-        self.WeatherIcon.setGeometry(80,240,200,200)
+        self.WeatherIcon = QLabel("", self)
+        self.DefaultPixmap = QPixmap("partly-cloudy-day.png")
+        self.WeatherIcon.setPixmap(self.DefaultPixmap)
+        self.WeatherIcon.setScaledContents(True)
+        self.WeatherIcon.setGeometry(70,250,170,170)
         self.WeatherIcon.setStyleSheet("font-size: 190px;"
                                        "font-weight: bold;")
         self.WeatherIcon.setAlignment(Qt.AlignCenter)
+
+        self.WeatherDesc = QLabel("Partially cloudy", self)
+        self.WeatherDesc.setGeometry(50,420,200,50)
+        self.WeatherDesc.setStyleSheet("font-size: 12px;"
+                                       "font-weight: bold")
 
         self.Rain = QLabel("Precipitation: 100%", self)
         self.Rain.setGeometry(80,450,150,70)
@@ -127,11 +133,13 @@ class WeatherApp (QMainWindow):
     def initUI(self):
         pass
 
+    #function to retrieve weather data from the API
     def getWeather(self):
         
         personalApiKey = "937SX7U7TTKKHLWMKQQTMVC2G"
         cityIn = self.CitySearch.text()
-        url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{cityIn}?key={personalApiKey}"
+        self.CitySearch.clear()
+        url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{cityIn}?key={personalApiKey}&include=fcst&elements=datetime,temp,precip,windspeed,humidity,icon,conditions&unitGroup=metric"
         
         try:
             response = requests.get(url)
@@ -180,9 +188,7 @@ class WeatherApp (QMainWindow):
         except requests.exceptions.RequestException as e:
             print(f"Other error occurred:{e}")
             self.displayError(f"Other error occurred:{e}", "Error")
-           
-        #print(data['resolvedAddress'])
-        #print(data['days'][0]['temp'])
+
 
     #displays an error message for the user after an error occurs
     def displayError(self, ErrorName, ErrorTitle):
@@ -190,8 +196,44 @@ class WeatherApp (QMainWindow):
         self.ErrorMsgBox.setWindowTitle(ErrorTitle)
         self.ErrorMsgBox.exec_()
 
+
+    #function to retrieve weather data and display it in UI components from the retrieved .json 
     def displayWeather(self, data):
-        print(data)
+        self.City.setText(data['resolvedAddress'].split(",")[0])
+        self.Temperature.setText(str(int(round(data['days'][0]['temp'], 0))))
+        self.Rain.setText(f"Precipitation: {(data['days'][0]['precip']):.0f}%")
+        self.Humidity.setText(f"Humidity: {(data['days'][0]['humidity']):.0f}%")
+        self.Windspeed.setText(f"Wind Speed: {(data['days'][0]['humidity']):.0f}km/h")
+        self.WeatherDesc.setText((data['days'][0]['conditions']))
+        
+        #setting weather icons
+        self.pixmapIcon = QPixmap(self.IconManagement(str(data['days'][0]['icon'])))
+        self.WeatherIcon.setPixmap(self.pixmapIcon)
+        self.WeatherIcon.setScaledContents(True)
+
+
+    #function to display particular weather icons
+    def IconManagement(self, weatherID):
+        match weatherID:
+            case "snow":
+                return "snow.png"
+            case "rain":
+                return "rain.png"
+            case "fog":
+                return "fog.png"
+            case "wind":
+                return "wind.png"
+            case "cloudy":
+                return "cloudy.png"
+            case "partly-cloudy-day":
+                return "partly-cloudy-day.png"
+            case "partly-cloudy-night":
+                return "partly-cloudy-night.png"
+            case "clear-day":
+                return "clear-day.png"
+            case "clear-night":
+                return "clear-night.png"
+    
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
