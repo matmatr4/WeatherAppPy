@@ -147,6 +147,9 @@ class WeatherApp (QMainWindow):
         self.CitySearch.clear()
         url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{cityIn}?key={personalApiKey}&include=fcst&elements=datetime,temp,precip,windspeed,humidity,icon,conditions&unitGroup=metric"
         
+        self.TemperatureUnit2.setText("°F")
+        self.TemperatureUnitSel.setText("°C")
+
         try:
             response = requests.get(url)
             response.raise_for_status() #so that an error is raised if response is bad
