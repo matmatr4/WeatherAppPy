@@ -96,6 +96,7 @@ class WeatherApp (QMainWindow):
                                                 color: #bdbdbd;
                                             }
                                             """)
+        self.TemperatureUnit2.clicked.connect(self.UnitConversion)
 
         self.WeatherIcon = QLabel("", self)
         self.DefaultPixmap = QPixmap("partly-cloudy-day.png")
@@ -129,7 +130,12 @@ class WeatherApp (QMainWindow):
         self.ErrorMsgBox = QMessageBox(self)
         self.ErrorMsgBox.setIcon(QMessageBox.Warning)
 
+        #UI part 3
 
+        #self.initUI()
+
+
+    #all of the details regarding UI design 
     def initUI(self):
         pass
 
@@ -233,6 +239,18 @@ class WeatherApp (QMainWindow):
                 return "clear-day.png"
             case "clear-night":
                 return "clear-night.png"
+    
+    def UnitConversion(self):
+        if self.TemperatureUnitSel.text() == "°C":
+            self.TemperatureUnit2.setText("°C")
+            self.TemperatureUnitSel.setText("°F")
+            self.Temperature.setText(f"{int(self.Temperature.text()) *(9/5)+32:.0f}")
+        elif self.TemperatureUnitSel.text() == "°F":
+            self.TemperatureUnit2.setText("°F")
+            self.TemperatureUnitSel.setText("°C")
+            self.Temperature.setText(f"{(int(self.Temperature.text()) -32)*(5/9):.0f}")
+
+        
     
 
 if __name__ == "__main__":
