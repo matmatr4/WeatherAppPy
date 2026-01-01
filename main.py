@@ -1,8 +1,9 @@
 import sys
 import requests 
-from PyQt5.QtWidgets import QApplication, QLabel, QLineEdit, QPushButton, QVBoxLayout, QMainWindow, QMessageBox
+from PyQt5.QtWidgets import QApplication, QLabel, QLineEdit, QPushButton, QHBoxLayout, QVBoxLayout, QMainWindow, QMessageBox, QWidget
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
+from datetime import datetime, date
 
 class WeatherApp (QMainWindow):
     def __init__(self):
@@ -130,15 +131,14 @@ class WeatherApp (QMainWindow):
         self.ErrorMsgBox = QMessageBox(self)
         self.ErrorMsgBox.setIcon(QMessageBox.Warning)
 
-        #UI part 3
-        
-
+        self.weeklyWeather()
         #self.initUI()
 
 
     #all of the details regarding UI design 
     def initUI(self):
         pass
+
 
     #function to retrieve weather data from the API
     def getWeather(self):
@@ -156,6 +156,7 @@ class WeatherApp (QMainWindow):
             response.raise_for_status() #so that an error is raised if response is bad
             data = response.json()
             self.displayWeather(data)
+            self.displayWeeklyWeather(data)
         
         #catches errors with API response received
         except requests.exceptions.HTTPError:
@@ -221,6 +222,41 @@ class WeatherApp (QMainWindow):
         self.WeatherIcon.setPixmap(self.pixmapIcon)
         self.WeatherIcon.setScaledContents(True)
 
+
+    #function to display the upcoming week's weather in boxes at the bottom of the window
+    def displayWeeklyWeather(self, data):
+        
+        for i in range(7):
+            tempMin = f"{data['days'][i]['tempmin']:.0f}"
+            tempMax = f"{data['days'][i]['tempmax']:.0f}"
+            pixmapIcon = QPixmap(self.IconManagement(str(data['days'][i]['icon']))) 
+            weekday = self.dateToWeekday(data['days'][i]['datetime'])
+
+            self.weeklyWeatherBlock(tempMin, tempMax, pixmapIcon, weekday)
+
+    
+    #function that adds a block for each day of the upcoming week's onto the window
+    def weeklyWeatherBlock(self, tempMin, tempMax, pixmapIcon, weekday):
+        pass
+    
+    #function to turn any date into its corresponding weekday
+    def dateToWeekday(self, date):
+        match date.strptime(date, "%Y-%m-%d").weekday():
+            case 0:
+                return "Mon"
+            case 1:
+                return "Tue"
+            case 2:
+                return "Wed"
+            case 3:
+                return "Thu"
+            case 4:
+                return "Fri"
+            case 5: 
+                return "Sat"
+            case 6:
+                return "Sun"
+    
 
     #function to display particular weather icons
     def IconManagement(self, weatherID):
