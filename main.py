@@ -131,6 +131,7 @@ class WeatherApp (QMainWindow):
         self.ErrorMsgBox.setIcon(QMessageBox.Warning)
 
         #UI part 3
+        
 
         #self.initUI()
 
