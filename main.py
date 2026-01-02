@@ -226,7 +226,7 @@ class WeatherApp (QMainWindow):
     #function to display the upcoming week's weather in boxes at the bottom of the window
     def displayWeeklyWeather(self, data):
         
-        #preventing overaly issues, by checking if a widget object already exists, and if so, deleting it
+        #preventing overlay issues, by checking if a widget object already exists, and if so, deleting it
         if self.findChild(QWidget, 'weekWidget') is not None:
                 self.findChild(QWidget, 'weekWidget').deleteLater()
             
@@ -244,7 +244,7 @@ class WeatherApp (QMainWindow):
             pixmapIcon = QPixmap(self.IconManagement(str(data['days'][i]['icon']))) 
             weekday = self.dateToWeekday(data['days'][i]['datetime'])
 
-            dayBlock = self.weeklyWeatherBlock(tempMin, tempMax, pixmapIcon, weekday)
+            dayBlock = self.weeklyWeatherBlock(tempMin, tempMax, pixmapIcon, weekday, i)
             self.weekLayout.addWidget(dayBlock)
         
         self.weekWidget.setLayout(self.weekLayout)
@@ -255,7 +255,7 @@ class WeatherApp (QMainWindow):
 
     
     #function that adds a block for each day of the upcoming week's onto the window
-    def weeklyWeatherBlock(self, tempMin, tempMax, pixmapIcon, weekday):
+    def weeklyWeatherBlock(self, tempMin, tempMax, pixmapIcon, weekday, index):
         
         self.dayBlock = QFrame(self)
         self.dayBlock.setFixedSize(70,150)
@@ -280,6 +280,9 @@ class WeatherApp (QMainWindow):
         self.dayBlockLayout.addWidget(self.iconLabel)
 
         self.tempLabel = QLabel(f"{tempMin} | {tempMax}")
+        self.tempLabel.setObjectName(f"tempLabel{index}")
+        self.tempLabel.setProperty("minTemp", int(tempMin))
+        self.tempLabel.setProperty("maxTemp", int(tempMax))
         self.tempLabel.setAlignment(Qt.AlignCenter)
         self.tempLabel.setStyleSheet("font-size: 12px;"
                                      "background-color: transparent;")
@@ -336,13 +339,25 @@ class WeatherApp (QMainWindow):
             self.TemperatureUnit2.setText("°C")
             self.TemperatureUnitSel.setText("°F")
             self.Temperature.setText(f"{int(self.Temperature.text()) *(9/5)+32:.0f}")
+            
+            for i in range(7):
+                self.tempLabel = self.findChild(QLabel, f"tempLabel{i}")
+                self.newMinTemp = self.tempLabel.property("minTemp")
+                self.newMaxTemp = self.tempLabel.property("maxTemp")
+                self.tempLabel.setText((f"{(int(self.newMinTemp) * 9/5) + 32:.0f} | {(int(self.newMaxTemp) * 9/5) + 32:.0f}"))
+
         elif self.TemperatureUnitSel.text() == "°F":
             self.TemperatureUnit2.setText("°F")
             self.TemperatureUnitSel.setText("°C")
             self.Temperature.setText(f"{(int(self.Temperature.text()) -32)*(5/9):.0f}")
 
-        
+            for i in range(7):
+                self.tempLabel = self.findChild(QLabel, f"tempLabel{i}")
+                self.newMinTemp = self.tempLabel.property("minTemp")
+                self.newMaxTemp = self.tempLabel.property("maxTemp")
+                self.tempLabel.setText((f"{self.newMinTemp:.0f} | {self.newMaxTemp:.0f}"))
     
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
