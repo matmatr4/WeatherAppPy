@@ -1,6 +1,6 @@
 import sys
 import requests 
-from PyQt5.QtWidgets import QApplication, QLabel, QLineEdit, QPushButton, QHBoxLayout, QVBoxLayout, QMainWindow, QMessageBox, QWidget
+from PyQt5.QtWidgets import QApplication, QLabel, QLineEdit, QPushButton, QHBoxLayout, QVBoxLayout, QMainWindow, QMessageBox, QWidget, QFrame
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 from datetime import datetime, date
@@ -10,7 +10,7 @@ class WeatherApp (QMainWindow):
         super().__init__()
 
         self.setWindowTitle("Weather App")
-        self.setGeometry(100,100,600,800)
+        self.setGeometry(100,100,600,750)
 
         self.backgroundPic = QPixmap("pexels-photo-1571730.jpeg")
         self.backgroundLabel = QLabel(self)
@@ -53,7 +53,7 @@ class WeatherApp (QMainWindow):
 
         #UI part 2
         self.WeatherPanel = QLabel(self)
-        self.WeatherPanel.setGeometry(20,120,560,660)
+        self.WeatherPanel.setGeometry(20,120,560,610)
         self.WeatherPanel.setStyleSheet("background-color: rgba(0, 0, 0, 90)")
 
         self.City = QLabel("City", self)
@@ -131,7 +131,7 @@ class WeatherApp (QMainWindow):
         self.ErrorMsgBox = QMessageBox(self)
         self.ErrorMsgBox.setIcon(QMessageBox.Warning)
 
-        self.weeklyWeather()
+        
         #self.initUI()
 
 
@@ -142,11 +142,11 @@ class WeatherApp (QMainWindow):
 
     #function to retrieve weather data from the API
     def getWeather(self):
-        
+
         personalApiKey = "937SX7U7TTKKHLWMKQQTMVC2G"
         cityIn = self.CitySearch.text()
         self.CitySearch.clear()
-        url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{cityIn}?key={personalApiKey}&include=fcst&elements=datetime,temp,precip,windspeed,humidity,icon,conditions&unitGroup=metric"
+        url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{cityIn}?key={personalApiKey}&include=fcst&elements=datetime,temp,precip,windspeed,humidity,icon,tempmax,tempmin,conditions&unitGroup=metric"
         
         self.TemperatureUnit2.setText("°F")
         self.TemperatureUnitSel.setText("°C")
@@ -226,22 +226,66 @@ class WeatherApp (QMainWindow):
     #function to display the upcoming week's weather in boxes at the bottom of the window
     def displayWeeklyWeather(self, data):
         
+        self.weekLayout = QHBoxLayout()
+        self.weekLayout.setAlignment(Qt.AlignCenter)
+
+        self.weekWidget = QWidget(self)
+        self.weekWidget.setGeometry(30,520,540,200)
+        self.weekWidget.setStyleSheet("background-color: rgba(0, 0, 0, 0);"
+                                      "")
+
         for i in range(7):
             tempMin = f"{data['days'][i]['tempmin']:.0f}"
             tempMax = f"{data['days'][i]['tempmax']:.0f}"
             pixmapIcon = QPixmap(self.IconManagement(str(data['days'][i]['icon']))) 
             weekday = self.dateToWeekday(data['days'][i]['datetime'])
 
-            self.weeklyWeatherBlock(tempMin, tempMax, pixmapIcon, weekday)
+            dayBlock = self.weeklyWeatherBlock(tempMin, tempMax, pixmapIcon, weekday)
+            self.weekLayout.addWidget(dayBlock)
+        
+        self.weekWidget.setLayout(self.weekLayout)
+        self.weekWidget.show()
 
     
     #function that adds a block for each day of the upcoming week's onto the window
     def weeklyWeatherBlock(self, tempMin, tempMax, pixmapIcon, weekday):
-        pass
+        
+        self.dayBlock = QFrame(self)
+        self.dayBlock.setFixedSize(70,150)
+        self.dayBlock.setStyleSheet("background-color: rgba(0, 0, 0, 90);"
+                                    "border-radius: 10px;")
+
+        self.dayBlockLayout = QVBoxLayout()
+        self.dayBlockLayout.setAlignment(Qt.AlignCenter)
+
+        self.weekdayLabel = QLabel(weekday)
+        self.weekdayLabel.setAlignment(Qt.AlignCenter)
+        self.weekdayLabel.setStyleSheet("font-weight: bold;"
+                                        "font-size: 18px;"
+                                        "background-color: transparent;")
+        self.dayBlockLayout.addWidget(self.weekdayLabel)
+
+        self.iconLabel = QLabel()
+        self.iconLabel.setPixmap(pixmapIcon)
+        self.iconLabel.setScaledContents(True)
+        self.iconLabel.setAlignment(Qt.AlignCenter)
+        self.iconLabel.setStyleSheet("background-color: transparent;")
+        self.dayBlockLayout.addWidget(self.iconLabel)
+
+        self.tempLabel = QLabel(f"{tempMin} | {tempMax}")
+        self.tempLabel.setAlignment(Qt.AlignCenter)
+        self.tempLabel.setStyleSheet("font-size: 12px;"
+                                     "background-color: transparent;")
+        self.dayBlockLayout.addWidget(self.tempLabel)
+
+
+        self.dayBlock.setLayout(self.dayBlockLayout)
+        return self.dayBlock
     
+
     #function to turn any date into its corresponding weekday
     def dateToWeekday(self, date):
-        match date.strptime(date, "%Y-%m-%d").weekday():
+        match datetime.strptime(date, "%Y-%m-%d").weekday():
             case 0:
                 return "Mon"
             case 1:
