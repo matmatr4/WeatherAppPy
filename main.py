@@ -226,6 +226,10 @@ class WeatherApp (QMainWindow):
     #function to display the upcoming week's weather in boxes at the bottom of the window
     def displayWeeklyWeather(self, data):
         
+        #preventing overaly issues, by checking if a widget object already exists, and if so, deleting it
+        if self.findChild(QWidget, 'weekWidget') is not None:
+                self.findChild(QWidget, 'weekWidget').deleteLater()
+            
         self.weekLayout = QHBoxLayout()
         self.weekLayout.setAlignment(Qt.AlignCenter)
 
@@ -245,6 +249,9 @@ class WeatherApp (QMainWindow):
         
         self.weekWidget.setLayout(self.weekLayout)
         self.weekWidget.show()
+
+        #this will be used to find the object with find name, couple lines above, so in case such object already exists it can be deleted
+        self.weekWidget.setObjectName("weekWidget")
 
     
     #function that adds a block for each day of the upcoming week's onto the window
