@@ -14,21 +14,51 @@ class WeatherApp (QMainWindow):
 
         self.backgroundPic = QPixmap("pexels-photo-1571730.jpeg")
         self.backgroundLabel = QLabel(self)
+        
+        self.WeatherPanel = QLabel(self)
+        
+        self.WelcomeLabel = QLabel("Welcome to Weather App!", self)
+        self.CitySearch = QLineEdit(self)
+        self.SearchButton = QPushButton("Search", self)
+        
+        #UI part 2
+        self.WeatherPanel2 = QLabel(self)
+        
+        self.City = QLabel("City", self)
+        self.Temperature = QLabel("150", self)
+        self.TemperatureUnitSel = QPushButton("°C", self)
+        self.TempSlash = QLabel("/", self)
+        self.TemperatureUnit2 = QPushButton("°F", self)
+        self.WeatherIcon = QLabel("", self)
+        self.DefaultPixmap = QPixmap("partly-cloudy-day.png")
+        self.WeatherDesc = QLabel("Partially cloudy", self)
+        
+        self.Rain = QLabel("Precipitation: 100%", self)
+        self.Humidity = QLabel("Humidity: 100%", self)
+        self.Windspeed = QLabel("Wind Speed: 5km/h", self)
+        
+        self.ErrorMsgBox = QMessageBox(self)
+        self.ErrorMsgBox.setIcon(QMessageBox.Warning)
+
+        self.initUI1()
+        self.initUI2()
+
+
+    #all of the details regarding UI design of the main title, search button and text field, also the background
+    def initUI1(self):
         self.backgroundLabel.setGeometry(0,0,600,800)
         self.backgroundLabel.setPixmap(self.backgroundPic)
         self.backgroundLabel.setScaledContents(True)
-        self.WeatherPanel = QLabel(self)
+
         self.WeatherPanel.setGeometry(0,0,600,800)
         self.WeatherPanel.setStyleSheet("background-color: rgba(0, 0, 0, 90)")
 
-        self.WelcomeLabel = QLabel("Welcome to Weather App!", self)
         self.WelcomeLabel.setGeometry(0,0,600,60)
         self.WelcomeLabel.setStyleSheet("color: white;"
                                         "font-size: 35px;"
                                         "font-weight: bold;")
         self.WelcomeLabel.setAlignment(Qt.AlignCenter)
 
-        self.CitySearch = QLineEdit(self)
         self.CitySearch.setGeometry(30,70,370,30)
         self.CitySearch.setStyleSheet("font-size: 15px;"
                                       "background-color: white;"
@@ -36,7 +66,6 @@ class WeatherApp (QMainWindow):
                                       "color: #2a2a2a")
         self.CitySearch.setPlaceholderText("Enter your city and country (e.g. London, UK)")
 
-        self.SearchButton = QPushButton("Search", self)
         self.SearchButton.setGeometry(420,67,150,36)
         self.SearchButton.setStyleSheet("""
                                         QPushButton {
@@ -49,28 +78,25 @@ class WeatherApp (QMainWindow):
                                         }                       
                                         """)
         self.SearchButton.clicked.connect(self.getWeather)
-        
 
-        #UI part 2
-        self.WeatherPanel = QLabel(self)
-        self.WeatherPanel.setGeometry(20,120,560,610)
-        self.WeatherPanel.setStyleSheet("background-color: rgba(0, 0, 0, 90)")
 
-        self.City = QLabel("City", self)
+    #characteristics of the UI responsible for displaying weather details of a place at the current time
+    def initUI2(self):
+        self.WeatherPanel2.setGeometry(20,120,560,610)
+        self.WeatherPanel2.setStyleSheet("background-color: rgba(0, 0, 0, 90)")
+
         self.City.setGeometry(20,150,560,80)
         self.City.setStyleSheet("font-size: 70px;"
                                 "color: white;"
                                 "background-color: transparent;"
                                 "font-weight: bold;")
         self.City.setAlignment(Qt.AlignCenter)
-        
-        self.Temperature = QLabel("150", self)
+
         self.Temperature.setGeometry(260,240,180,200)
         self.Temperature.setStyleSheet("font-size: 100px;"
                                        "font-weight: bold;")
         self.Temperature.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
-        self.TemperatureUnitSel = QPushButton("°C", self)
         self.TemperatureUnitSel.setGeometry(440,290,60,50)
         self.TemperatureUnitSel.setStyleSheet("""
                                             QPushButton {
@@ -79,13 +105,11 @@ class WeatherApp (QMainWindow):
                                                 color: white; 
                                             }
                                             """)
-
-        self.TempSlash = QLabel("/", self)
+        
         self.TempSlash.setGeometry(505,290,10,50)
         self.TempSlash.setStyleSheet("font-size: 30px;"
                                      "color: grey;")
-
-        self.TemperatureUnit2 = QPushButton("°F", self)
+        
         self.TemperatureUnit2.setGeometry(510,290,60,50)
         self.TemperatureUnit2.setStyleSheet("""
                                             QPushButton {
@@ -99,8 +123,6 @@ class WeatherApp (QMainWindow):
                                             """)
         self.TemperatureUnit2.clicked.connect(self.UnitConversion)
 
-        self.WeatherIcon = QLabel("", self)
-        self.DefaultPixmap = QPixmap("partly-cloudy-day.png")
         self.WeatherIcon.setPixmap(self.DefaultPixmap)
         self.WeatherIcon.setScaledContents(True)
         self.WeatherIcon.setGeometry(70,250,170,170)
@@ -108,36 +130,21 @@ class WeatherApp (QMainWindow):
                                        "font-weight: bold;")
         self.WeatherIcon.setAlignment(Qt.AlignCenter)
 
-        self.WeatherDesc = QLabel("Partially cloudy", self)
         self.WeatherDesc.setGeometry(50,420,200,50)
         self.WeatherDesc.setStyleSheet("font-size: 12px;"
                                        "font-weight: bold")
-
-        self.Rain = QLabel("Precipitation: 100%", self)
+        
         self.Rain.setGeometry(80,450,150,70)
         self.Rain.setStyleSheet("font-size: 15px;"
                                 "font-weight: bold;")
-
-        self.Humidity = QLabel("Humidity: 100%", self)
+        
         self.Humidity.setGeometry(255,450,120,70)
         self.Humidity.setStyleSheet("font-size: 15px;"
                                     "font-weight: bold;")
-
-        self.Windspeed = QLabel("Wind Speed: 5km/h", self)
+        
         self.Windspeed.setGeometry(410,450,150,70)
         self.Windspeed.setStyleSheet("font-size: 15px;"
                                      "font-weight: bold;")
-
-        self.ErrorMsgBox = QMessageBox(self)
-        self.ErrorMsgBox.setIcon(QMessageBox.Warning)
-
-        
-        #self.initUI()
-
-
-    #all of the details regarding UI design 
-    def initUI(self):
-        pass
 
 
     #function to retrieve weather data from the API
@@ -208,7 +215,7 @@ class WeatherApp (QMainWindow):
         self.ErrorMsgBox.exec_()
 
 
-    #function to retrieve weather data and display it in UI components from the retrieved .json 
+    #function to retrieve todays weather data and display it in UI components from the retrieved .json 
     def displayWeather(self, data):
         self.City.setText(data['resolvedAddress'].split(",")[0])
         self.Temperature.setText(str(int(round(data['days'][0]['temp'], 0))))
@@ -223,7 +230,7 @@ class WeatherApp (QMainWindow):
         self.WeatherIcon.setScaledContents(True)
 
 
-    #function to display the upcoming week's weather in boxes at the bottom of the window
+    #function to display the upcoming week's weather in the widget at the bottom of the window
     def displayWeeklyWeather(self, data):
         
         #preventing overlay issues, by checking if a widget object already exists, and if so, deleting it
@@ -250,11 +257,11 @@ class WeatherApp (QMainWindow):
         self.weekWidget.setLayout(self.weekLayout)
         self.weekWidget.show()
 
-        #this will be used to find the object with find name, couple lines above, so in case such object already exists it can be deleted
+        #this will be used to find the object with find name (line 236), so in case such object already exists it can be deleted
         self.weekWidget.setObjectName("weekWidget")
 
     
-    #function that adds a block for each day of the upcoming week's onto the window
+    #function that adds a block for each day of the upcoming week's onto the upcoming week weather widget (weekWidget)
     def weeklyWeatherBlock(self, tempMin, tempMax, pixmapIcon, weekday, index):
         
         self.dayBlock = QFrame(self)
@@ -293,7 +300,7 @@ class WeatherApp (QMainWindow):
         return self.dayBlock
     
 
-    #function to turn any date into its corresponding weekday
+    #function to turn any date into its corresponding weekday 
     def dateToWeekday(self, date):
         match datetime.strptime(date, "%Y-%m-%d").weekday():
             case 0:
@@ -334,6 +341,8 @@ class WeatherApp (QMainWindow):
             case "clear-night":
                 return "clear-night.png"
     
+
+    #function to convert celsius to fahrenheit and vice versa 
     def UnitConversion(self):
         if self.TemperatureUnitSel.text() == "°C":
             self.TemperatureUnit2.setText("°C")
