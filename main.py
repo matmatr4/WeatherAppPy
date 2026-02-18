@@ -3,7 +3,11 @@ import requests
 from PyQt5.QtWidgets import QApplication, QLabel, QLineEdit, QPushButton, QHBoxLayout, QVBoxLayout, QMainWindow, QMessageBox, QWidget, QFrame
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
-from datetime import datetime, date
+from datetime import datetime
+
+#for secure import of API key
+from dotenv import load_dotenv
+import os
 
 class WeatherApp (QMainWindow):
     def __init__(self):
@@ -150,7 +154,8 @@ class WeatherApp (QMainWindow):
     #function to retrieve weather data from the API
     def getWeather(self):
 
-        personalApiKey = "937SX7U7TTKKHLWMKQQTMVC2G"
+        load_dotenv() #loads the .env file, so that the API key can be retrieved from it
+        personalApiKey = os.getenv("API_KEY") #retrieving API key from .env file, so that it is not exposed in the code
         cityIn = self.CitySearch.text()
         self.CitySearch.clear()
         url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{cityIn}?key={personalApiKey}&include=fcst&elements=datetime,temp,precip,windspeed,humidity,icon,tempmax,tempmin,conditions&unitGroup=metric"
