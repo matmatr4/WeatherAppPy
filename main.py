@@ -217,7 +217,7 @@ class WeatherApp (QMainWindow):
 
     #function to retrieve todays weather data and display it in UI components from the retrieved .json 
     def displayWeather(self, data):
-        self.City.setText(data['resolvedAddress'].split(",")[0])
+        self.City.setText((data['resolvedAddress'].split(",")[0]).capitalize())
         self.Temperature.setText(str(int(round(data['days'][0]['temp'], 0))))
         self.Rain.setText(f"Precipitation: {(data['days'][0]['precip']):.0f}%")
         self.Humidity.setText(f"Humidity: {(data['days'][0]['humidity']):.0f}%")
@@ -323,23 +323,23 @@ class WeatherApp (QMainWindow):
     def IconManagement(self, weatherID):
         match weatherID:
             case "snow":
-                return "snow.png"
+                return "icons/snow.png"
             case "rain":
-                return "rain.png"
+                return "icons/rain.png"
             case "fog":
-                return "fog.png"
+                return "icons/fog.png"
             case "wind":
-                return "wind.png"
+                return "icons/wind.png"
             case "cloudy":
-                return "cloudy.png"
+                return "icons/cloudy.png"
             case "partly-cloudy-day":
-                return "partly-cloudy-day.png"
+                return "icons/partly-cloudy-day.png"
             case "partly-cloudy-night":
-                return "partly-cloudy-night.png"
+                return "icons/partly-cloudy-night.png"
             case "clear-day":
-                return "clear-day.png"
+                return "icons/clear-day.png"
             case "clear-night":
-                return "clear-night.png"
+                return "icons/clear-night.png"
     
 
     #function to convert celsius to fahrenheit and vice versa 
