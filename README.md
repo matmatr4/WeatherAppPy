@@ -2,7 +2,7 @@
 
 ## Overview
 
-A python project made with the purpose to explore backend development, specifically APIs. Visual Crossing Weather API was used, and full documentation can be found below on GitHub. The app provides  real time forecasts for the upcoming week for any location. It displays temperature both in celsius and fahrenheit, and for the present time, humidity, precipitation and windspeed are also present.
+A python project made with the purpose to explore backend development, specifically APIs. Visual Crossing Weather API was used, and full documentation can be found below on GitHub. The app provides  real time forecasts for the upcoming week for any location. It displays temperature both in celsius and fahrenheit, and for the present time, humidity, precipitation and windspeed are also present. It has also been deployed using py2app, making it a standalone mac OS X application.
 
 
 
@@ -28,7 +28,8 @@ A python project made with the purpose to explore backend development, specifica
 - PyQt5  
 - Requests  
 - Visual Crossing Weather API  
-- python-dotenv  
+- python-dotenv
+- py2app
 
 
 
@@ -41,7 +42,7 @@ This project was created to:
 - Learn how REST APIs work  
 - Handle JSON responses  
 - Practice secure API key management  
-- Build a structured desktop application
+- Build a structured, stand-alone desktop application
 
 
 
@@ -53,21 +54,5 @@ This project was created to:
 - Designing and structuring a GUI application with PyQt5  
 - Handling user input and updating UI elements dynamically  
 - Understanding how frontend applications consume backend services
+- Exporting projects from IDEs into actual working applications and strengthen skills to build applicable solutions
 
-
----
-
-
-
-## Future Plans (Not Yet Implemented)
-
-Extensions to this projects are planned to initiate around March, as a new feature with 'saved locations' is to be added together with an account system, for the purpose of remote storage of saved spaces. Additionally there will also be an option of local storage of 'saved locations', without the need to create an account. AWS, Microsoft Azure or another cloud service provider will be used, specifically services like B2C, Cogni or even FastAPI.
-The project will also serve as part of exploring the cloud and the deployment process, specifically with the use of AWS, Microsoft Azure or another cloud service provider.
-
-- Saved locations feature  
-- Account system for remote storage  
-- Optional local storage for saved locations  
-- Cloud integration (AWS, Azure, or similar)  
-- Exploration of deployment and backend services  
-
-> These features are planned but not yet implemented.
